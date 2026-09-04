@@ -1,6 +1,6 @@
 name: Notes
 
-"on":
+on:
   workflow_dispatch:
     inputs:
       version:
