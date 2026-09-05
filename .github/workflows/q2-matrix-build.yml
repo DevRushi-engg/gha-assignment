@@ -27,8 +27,29 @@ jobs:
         run: |
           node -v
           npm -v
+          
       - name: Write Report
         run: |
           mkdir -p out
-          echo "Runner OS: $Runner_OS">out/report-${{ matrix.os }}-${{ matrix.node }}.txt
+          echo "Runner OS: $Runner_OS","Node Version: ${{ matrix.node }}","Runner Number: ${{ github.run_number }}"
+            > "out/report-${{ matrix.os }}-${{ matrix.node }}.txt"
+
+      - uses: actions/upload-artifiact@v4
+        with:
+          name: out/report-${{ matrix.os }}-${{ matrix.node }}
+          path: out/report-${{ matrix.os }}-${{ matrix.node }}.txt
+
+  collect:
+    needs: build
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artificats@v4
+        with:
+          path: all-reports
+
+      - name: Print all reports
+        run: find all-reports -type f -exec cat {} \;
+
+          
       
