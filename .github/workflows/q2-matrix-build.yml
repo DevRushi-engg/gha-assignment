@@ -1,6 +1,6 @@
-name: Q2 Release Note
+name: Q2 Matrix Build
 
-on: 
+on:
   push:
     branches: [main]
   workflow_dispatch:
@@ -12,18 +12,19 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, ubuntu.22.04]
-        node: [18,20]
+        os: [ubuntu-latest, ubuntu-22.04]
+        node: [18, 20]
         exclude:
-          - os: ubuntu.22.04
+          - os: ubuntu-22.04
             node: 18
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
-          
-      - name: Print version
+
+      - name: Print versions
         run: |
           node -v
           npm -v
@@ -34,9 +35,9 @@ jobs:
           echo "Runner OS: $Runner_OS","Node Version: ${{ matrix.node }}","Runner Number: ${{ github.run_number }}"
             > "out/report-${{ matrix.os }}-${{ matrix.node }}.txt"
 
-      - uses: actions/upload-artifiact@v4
+      - uses: actions/upload-artifact@v4
         with:
-          name: out/report-${{ matrix.os }}-${{ matrix.node }}
+          name: report-${{ matrix.os }}-${{ matrix.node }}
           path: out/report-${{ matrix.os }}-${{ matrix.node }}.txt
 
   collect:
@@ -44,7 +45,7 @@ jobs:
     if: always()
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artificats@v4
+      - uses: actions/download-artifact@v4
         with:
           path: all-reports
 
