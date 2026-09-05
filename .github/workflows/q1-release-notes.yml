@@ -34,3 +34,4 @@ jobs:
           echo "Release type: ${{ inputs.release_type }}" >> $GITHUB_STEP_SUMMARY
           echo "Build tag: ${{ needs.prepare.outputs.build_tag }}" >> $GITHUB_STEP_SUMMARY
           echo "Build date: ${{ needs.prepare.outputs.build_date }}" >> $GITHUB_STEP_SUMMARY
+          
