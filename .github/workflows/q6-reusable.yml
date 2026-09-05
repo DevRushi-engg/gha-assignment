@@ -1,0 +1,28 @@
+name: Reusable Workflow
+
+on:
+  workflow_call:
+    inputs:
+      target_env:
+        required: true
+        type: string
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: check repository
+        uses: actions/checkout@v4
+
+      - name: running the greet action
+        id: greet
+        uses: ./.github/actions/greet
+        with:
+          name: GitHub User
+          env_name: ${{ inputs.target_env }}
+
+      - name: Show greeting
+        run: |
+          echo "${{ steps.greet.outputs.greeting }}"
+          echo "Deploying to ${{ inputs.target_env }}... done."
